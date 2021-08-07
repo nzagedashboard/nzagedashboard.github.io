@@ -1281,34 +1281,10 @@ $(document).ready(function () {
 <p>The <code>surveymonkey</code> package makes it easier to access the Survey Monkey API in R. It is developed and maintained by TNTP, a nonprofit company working to end the injustice of educational inequality.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbIiMgZm9yIHdyYW5nbGluZywgdml6LCBldGMuIiwiaWYoIXJlcXVpcmUoXCJ0aWR5dmVyc2VcIikpIHsiLCIgIGluc3RhbGwucGFja2FnZXMoXCJ0aWR5dmVyc2VcIikiLCJ9IiwiIiwiIyBlYXN5IGVkaXR0aW5nIG9mIFIgZW52aXJvbm1lbnRzIiwiaWYoIXJlcXVpcmUoXCJ1c2V0aGlzXCIpKSB7IiwiICBpbnN0YWxsLnBhY2thZ2VzKFwidXNldGhpc1wiKSIsIn0iLCIiLCIjIE5lZWQgZGV2dG9vbHMgaW5zdGFsbCBzdXJ2ZXltb25rZXkgcGFja2FnZSBmcm9tIGdpdGh1YiIsImlmKCFyZXF1aXJlKFwiZGV2dG9vbHNcIikpIHsiLCIgIGluc3RhbGwucGFja2FnZXMoXCJkZXZ0b29sc1wiKSIsIn0iLCIiLCIjIEdldCB0aGUgZGV2IHZlcnNpb24gb2Ygc3VydmV5bW9ua2V5IHBhY2thZ2UgIiwiIyBodHRwczovL2dpdGh1Yi5jb20vdG50cC9zdXJ2ZXltb25rZXkiLCJkZXZ0b29sczo6aW5zdGFsbF9naXRodWIoXCJ0bnRwL3N1cnZleW1vbmtleVwiKSJdfQ== -->
-<pre class="r"><code># for wrangling, viz, etc.
-if(!require(&quot;tidyverse&quot;)) {
-  install.packages(&quot;tidyverse&quot;)
-}
-
-# easy editting of R environments
-if(!require(&quot;usethis&quot;)) {
-  install.packages(&quot;usethis&quot;)
-}
-
-# Need devtools install surveymonkey package from github
-if(!require(&quot;devtools&quot;)) {
-  install.packages(&quot;devtools&quot;)
-}
-
-# Get the dev version of surveymonkey package 
-# https://github.com/tntp/surveymonkey
-devtools::install_github(&quot;tntp/surveymonkey&quot;)</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbImxpYnJhcnkoXCJzdXJ2ZXltb25rZXlcIikiLCJsaWJyYXJ5KFwidGlkeXZlcnNlXCIpIl19 -->
-<pre class="r"><code>library(&quot;surveymonkey&quot;)
-library(&quot;tidyverse&quot;)</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1322,10 +1298,6 @@ library(&quot;tidyverse&quot;)</code></pre>
 <p>WARNING 3: Only 100 responses can be fetched per API call, a survey with X respondents will make at least X/100 calls to the API.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbIiMgR2V0IHRoZSBsYXRlc3QgMTAgKG9yIG4pIHN1cnZleXMgc28geW91IGNhbiBmaW5kIHRoZSBJRHMgZm9yIHRoZSBzdXJ2ZXlzIHlvdSB3YW50Iiwic3VydmV5cyA8LSBicm93c2Vfc3VydmV5cygxMCkiXX0= -->
-<pre class="r"><code># Get the latest 10 (or n) surveys so you can find the IDs for the surveys you want
-surveys &lt;- browse_surveys(10)</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1334,80 +1306,26 @@ surveys &lt;- browse_surveys(10)</code></pre>
 <p>Here I’m saving the data as .csv that can be used as back up and more easily integrated into the site.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbIiMgVGhpcyB0b29rIDYgcmVxdWVzdHMgd2hlbiBsYXN0IHJ1biIsImdyYWRzX3JhdyA8LSAzMDI4ODY3NDYgJT4lICIsIiAgZmV0Y2hfc3VydmV5X29iaiAlPiUiLCIgIHBhcnNlX3N1cnZleSJdfQ== -->
-<pre class="r"><code># This took 6 requests when last run
-grads_raw &lt;- 302886746 %&gt;% 
-  fetch_survey_obj %&gt;%
-  parse_survey</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbImdyYWRzX21pbiA8LSBncmFkc19yYXcgJT4lICIsIiAgIyBTYXkgdGhhdCBhIHN1Ym1pc3Npb24gaXMgY29tcGxldGUgaWYgdGhleSBhbnN3ZXJlZCB1cCB0byB0aGUgZGlzYWJpbGl0eSBxdWVzdGlvbiIsIiAgIyBUaGlzIGluY3JlYXNlZCB0aGUgbnVtYmVyIG9mIGNvbXBsZXRlcyBzbGlnaHRseS4gU2hvdWxkIGJlIGNoZWNrZWQgaW4gZmluYWwgcHJvY2Vzc2luZy4iLCIgIG11dGF0ZShjb21wbGV0ZSA9ICFpcy5uYShgRG8geW91IGlkZW50aWZ5IGFzIGEgcGVyc29uIHdpdGggYSBkaXNhYmlsaXR5P2ApKSAlPiUgIiwiICBzZWxlY3QoZGF0ZV9tb2RpZmllZCwgcmVzcG9uc2Vfc3RhdHVzLCAiLCIgICAgICAgICBgUGxlYXNlIHRlbGwgdXMgdGhlIG9yZ2FuaXNhdGlvbiB5b3Ugam9pbmVkIGFzIGEgZ3JhZHVhdGUuYCwiLCIgICAgICAgICBjb21wbGV0ZSkgJT4lICIsIiAgcmVuYW1lKEVtcGxveWVyID0gYFBsZWFzZSB0ZWxsIHVzIHRoZSBvcmdhbmlzYXRpb24geW91IGpvaW5lZCBhcyBhIGdyYWR1YXRlLmApICIsIiIsIndyaXRlX2NzdihncmFkc19taW4sIHN0cl9jKFwiRGF0YS9mcm9tQVBJL1wiLCBTeXMudGltZSgpLCBcIl9ncmFkcy5jc3ZcIikpIl19 -->
-<pre class="r"><code>grads_min &lt;- grads_raw %&gt;% 
-  # Say that a submission is complete if they answered up to the disability question
-  # This increased the number of completes slightly. Should be checked in final processing.
-  mutate(complete = !is.na(`Do you identify as a person with a disability?`)) %&gt;% 
-  select(date_modified, response_status, 
-         `Please tell us the organisation you joined as a graduate.`,
-         complete) %&gt;% 
-  rename(Employer = `Please tell us the organisation you joined as a graduate.`) 
-
-write_csv(grads_min, str_c(&quot;Data/fromAPI/&quot;, Sys.time(), &quot;_grads.csv&quot;))</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbIiMgVGhpcyB0b29rIDMgcmVxdWVzdHMgd2hlbiBsYXN0IHJ1biIsImludGVybnNfcmF3IDwtIDMwMjg4NjczMyAlPiUgIiwiICBmZXRjaF9zdXJ2ZXlfb2JqICU+JSIsIiAgcGFyc2Vfc3VydmV5Il19 -->
-<pre class="r"><code># This took 3 requests when last run
-interns_raw &lt;- 302886733 %&gt;% 
-  fetch_survey_obj %&gt;%
-  parse_survey</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbImludGVybnNfbWluIDwtIGludGVybnNfcmF3ICU+JSAiLCIgICMgU2F5IHRoYXQgYSBzdWJtaXNzaW9uIGlzIGNvbXBsZXRlIGlmIHRoZXkgYW5zd2VyZWQgdXAgdG8gdGhlIGRpc2FiaWxpdHkgcXVlc3Rpb24iLCIgICMgVGhpcyBpbmNyZWFzZWQgdGhlIG51bWJlciBvZiBjb21wbGV0ZXMgc2xpZ2h0bHkuIFNob3VsZCBiZSBjaGVja2VkIGluIGZpbmFsIHByb2Nlc3NpbmcuIiwiICBtdXRhdGUoY29tcGxldGUgPSAhaXMubmEoYERvIHlvdSBpZGVudGlmeSBhcyBhIHBlcnNvbiB3aXRoIGEgZGlzYWJpbGl0eT9gKSkgJT4lICIsIiAgc2VsZWN0KGRhdGVfbW9kaWZpZWQsIHJlc3BvbnNlX3N0YXR1cywgIiwiICAgICAgICAgYFdpdGggd2hpY2ggb3JnYW5pc2F0aW9uIGRpZCB5b3UgdW5kZXJ0YWtlIHlvdXIgbW9zdCByZWNlbnQgaW50ZXJuc2hpcD9gLCIsIiAgICAgICAgIGNvbXBsZXRlKSAlPiUgIiwiICByZW5hbWUoRW1wbG95ZXIgPSBgV2l0aCB3aGljaCBvcmdhbmlzYXRpb24gZGlkIHlvdSB1bmRlcnRha2UgeW91ciBtb3N0IHJlY2VudCBpbnRlcm5zaGlwP2ApICIsIiIsIndyaXRlX2NzdihpbnRlcm5zX21pbiwgc3RyX2MoXCJEYXRhL2Zyb21BUEkvXCIsIFN5cy50aW1lKCksIFwiX2ludGVybnMuY3N2XCIpKSJdfQ== -->
-<pre class="r"><code>interns_min &lt;- interns_raw %&gt;% 
-  # Say that a submission is complete if they answered up to the disability question
-  # This increased the number of completes slightly. Should be checked in final processing.
-  mutate(complete = !is.na(`Do you identify as a person with a disability?`)) %&gt;% 
-  select(date_modified, response_status, 
-         `With which organisation did you undertake your most recent internship?`,
-         complete) %&gt;% 
-  rename(Employer = `With which organisation did you undertake your most recent internship?`) 
-
-write_csv(interns_min, str_c(&quot;Data/fromAPI/&quot;, Sys.time(), &quot;_interns.csv&quot;))</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbIiMgVGhpcyB0b29rIDIgcmVxdWVzdHMgd2hlbiBsYXN0IHJ1biIsImVtcGxveWVyc19yYXcgPC0gMzAyODg2NzExICU+JSAiLCIgIGZldGNoX3N1cnZleV9vYmogJT4lIiwiICBwYXJzZV9zdXJ2ZXkiXX0= -->
-<pre class="r"><code># This took 2 requests when last run
-employers_raw &lt;- 302886711 %&gt;% 
-  fetch_survey_obj %&gt;%
-  parse_survey</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjpbImVtcGxveWVyc19taW4gPC0gZW1wbG95ZXJzX3JhdyAlPiUgIiwiICAjIFNheSB0aGF0IGEgc3VibWlzc2lvbiBpcyBjb21wbGV0ZSBpZiB0aGV5IGFuc3dlcmVkIHVwIHRvIHRoZSBkaXNhYmlsaXR5IHF1ZXN0aW9uIiwiICAjIFRoaXMgaW5jcmVhc2VkIHRoZSBudW1iZXIgb2YgY29tcGxldGVzIHNsaWdodGx5LiBTaG91bGQgYmUgY2hlY2tlZCBpbiBmaW5hbCBwcm9jZXNzaW5nLiIsIiAgbXV0YXRlKGNvbXBsZXRlID0gIWlzLm5hKGBXaGF0IGNoYWxsZW5nZXMgZG9lcyB5b3VyIG9yZ2FuaXNhdGlvbiBmYWNlIGluIHRyYW5zaXRpb25pbmcgZ3JhZHVhdGVzIGZyb20gdGhlaXIgZ3JhZHVhdGUgcHJvZ3JhbW1lIHRvIG5vbi1ncmFkdWF0ZSByb2xlcywgaWYgYW55P2ApKSAlPiUgIiwiICBzZWxlY3QoZGF0ZV9tb2RpZmllZCwgcmVzcG9uc2Vfc3RhdHVzLCAiLCIgICAgICAgICBgV2hhdCBpcyB0aGUgbmFtZSBvZiB5b3VyIG9yZ2FuaXNhdGlvbj9gLCIsIiAgICAgICAgIGNvbXBsZXRlKSAlPiUgIiwiICByZW5hbWUoRW1wbG95ZXIgPSBgV2hhdCBpcyB0aGUgbmFtZSBvZiB5b3VyIG9yZ2FuaXNhdGlvbj9gKSAiLCIiLCJ3cml0ZV9jc3YoZW1wbG95ZXJzX21pbiwgc3RyX2MoXCJEYXRhL2Zyb21BUEkvXCIsIFN5cy50aW1lKCksIFwiX2VtcGxveWVycy5jc3ZcIikpIl19 -->
-<pre class="r"><code>employers_min &lt;- employers_raw %&gt;% 
-  # Say that a submission is complete if they answered up to the disability question
-  # This increased the number of completes slightly. Should be checked in final processing.
-  mutate(complete = !is.na(`What challenges does your organisation face in transitioning graduates from their graduate programme to non-graduate roles, if any?`)) %&gt;% 
-  select(date_modified, response_status, 
-         `What is the name of your organisation?`,
-         complete) %&gt;% 
-  rename(Employer = `What is the name of your organisation?`) 
-
-write_csv(employers_min, str_c(&quot;Data/fromAPI/&quot;, Sys.time(), &quot;_employers.csv&quot;))</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 </div>
 

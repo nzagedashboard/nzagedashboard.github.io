@@ -19,3 +19,5 @@ Talent Solutions are early talent consulting and research specialists.
 Talent Solutions is dedicated to supporting your organisation to engage outstanding talent.  Our core focus is early talent programmes – degree qualified graduates, interns, school-leavers and cadets.
 
 Whether you are looking to recruit one or one hundred graduates, we can equip you with the tools, technology, resource and specialist expertise to deliver great results.
+```{.r .distill-force-highlighting-css}
+```

@@ -8,4 +8,4 @@ historical_data <- tibble::tribble(
 ) %>% 
   pivot_longer(-Year, names_to = "type", values_to = "n" )
 
-write_csv(historical_data, "Data/test.csv")
+write_csv(historical_data, "~/Documents/GitHub/nzagedashboard.github.io/Data/test.csv")
