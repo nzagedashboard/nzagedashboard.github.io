@@ -1,7 +1,7 @@
 ---
 title: "Dashboard 2021"
 description: |
- Status of responses for the NZAGE graduate and employer surveys. Updated daily.
+ Status of responses for the NZAGE graduate, intern and employer surveys. Updated at least daily.
 site: distill::distill_website
 output:
   distill::distill_article:
@@ -143,7 +143,7 @@ update_time <- lubridate::with_tz(Sys.time(), tzone = "Pacific/Auckland")
 update_time = format(update_time,format='%Y-%m-%d %H:%M')
 
 ```
-___Update as of `r update_time`.___
+_Update as of `r update_time`._
 
 ## Progress so far
 
@@ -241,7 +241,7 @@ org_summary <- full %>%
 
 ```
 
-This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[While we have done our best to automate matching interns and graduates to their correct employers based on their free text answers, the numbers may change somewhat with final data cleaning as unidentified or misidentified employers are corrected.] are included.
+This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[While we have used a two-stage automated checking approach to maximise correct coding of free text responses identifying the employer of eahc graduate and intern, these numbers may change somewhat with final data cleaning as unidentified or misidentified employers are corrected.] are included.
 
 `r DT::datatable(org_summary)`
 
