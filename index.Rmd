@@ -1,7 +1,7 @@
 ---
 title: "Dashboard 2021"
 description: |
-  Status of responses for the NZAGE graduate and employer surveys. Updated daily.
+ Status of responses for the NZAGE graduate and employer surveys. Updated daily.
 site: distill::distill_website
 output:
   distill::distill_article:
