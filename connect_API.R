@@ -14,7 +14,7 @@ grads_min <- grads_raw %>%
          complete) %>% 
   rename(Employer = `Please tell us the organisation you joined as a graduate.`) 
 
-write_csv(grads_min, str_c("Data/fromAPI/", Sys.time(), "_grads.csv"))
+write_csv(grads_min, str_c("~/Documents/GitHub/nzagedashboard.github.io/Data/fromAPI/", Sys.time(), "_grads.csv"))
 
 # This took 3 requests when last run
 interns_raw <- 302886733 %>% 
@@ -30,7 +30,7 @@ interns_min <- interns_raw %>%
          complete) %>% 
   rename(Employer = `With which organisation did you undertake your most recent internship?`) 
 
-write_csv(interns_min, str_c("Data/fromAPI/", Sys.time(), "_interns.csv"))
+write_csv(interns_min, str_c("~/Documents/GitHub/nzagedashboard.github.io/Data/fromAPI/", Sys.time(), "_interns.csv"))
 
 # This took 2 requests when last run
 employers_raw <- 302886711 %>% 
@@ -47,4 +47,4 @@ employers_min <- employers_raw %>%
          complete) %>% 
   rename(Employer = `What is the name of your organisation?`) 
 
-write_csv(employers_min, str_c("Data/fromAPI/", Sys.time(), "_employers.csv"))
+write_csv(employers_min, str_c("~/Documents/GitHub/nzagedashboard.github.io/Data/fromAPI/", Sys.time(), "_employers.csv"))
