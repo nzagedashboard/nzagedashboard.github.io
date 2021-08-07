@@ -1,0 +1,28 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "FAQ",
+      "author": [],
+      "contents": "\nHow often is the dashboard updated?\nThe dashboard will be updated at least once a day. You can see the last time it was updated displayed at the top of the dashboard.\nI think there is a problem or mistake, what do I do?\nIf there are any issues with the dashboard, please email survey@talentsolutions.co.nz to let us know.\nWho created this?\nThis dashboard has been created by Talent Solutions for the New Zealand Association of Graduate Employers..\nTalent Solutions are early talent consulting and research specialists. Talent Solutions is dedicated to supporting your organisation to engage outstanding talent. Our core focus is early talent programmes – degree qualified graduates, interns, school-leavers and cadets.\nWhether you are looking to recruit one or one hundred graduates, we can equip you with the tools, technology, resource and specialist expertise to deliver great results.\n\n\n\n",
+      "last_modified": "2021-08-07T17:30:32-04:00"
+    },
+    {
+      "path": "index.html",
+      "title": "Dashboard 2021",
+      "description": "Status of responses for the NZAGE graduate, intern and employer surveys. Updated at least daily.\n",
+      "author": [],
+      "contents": "\n\nContents\nProgress so far\nSummary by organisation\n\nUpdate as of 2021-08-07 17:37.\nProgress so far\nThe below charts show how we’re tracking for complete graduate, intern and employer surveys, as well as how many bespoke reports have been earned.\nNote on bespoke reports\nAn organisation earns a bespoke report when 10 or more of their graduates complete the graduate survey. They must also be a member of the NZAGE—this update data only reflects whether they have 10 or more complete graduate response. Double check NZAGE status before confirming with an organisation.\nplot of chunk unnamed-chunk-19Responses over time\nplot of chunk unnamed-chunk-20Summary by organisation\n\n\n",
+      "last_modified": "2021-08-07T17:30:36-04:00"
+    },
+    {
+      "path": "index.html",
+      "title": "Dashboard 2021",
+      "description": "Status of responses for the NZAGE graduate and employer surveys. Updated daily.\n",
+      "author": [],
+      "contents": "\n\nContents\nProgress so far\nSummary by organisation\n\nUpdate as of 2021-08-07 17:37.\nProgress so far\nThe below charts show how we’re tracking for complete graduate, intern and employer surveys, as well as how many bespoke reports have been earned.\nNote on bespoke reports\nAn organisation earns a bespoke report when 10 or more of their graduates complete the graduate survey. They must also be a member of the NZAGE—this update data only reflects whether they have 10 or more complete graduate response. Double check NZAGE status before confirming with an organisation.\nplot of chunk unnamed-chunk-19Responses over time\nplot of chunk unnamed-chunk-20Summary by organisation\n\n\n",
+      "last_modified": "2021-08-07T17:30:36-04:00"
+    }
+  ],
+  "collections": []
+}
