@@ -1,0 +1,19 @@
+name: "nzagedashboard"
+title: "NZAGE Dashboard 2021"
+description: |
+  NZAGE Dashboard
+output_dir: "docs"
+theme: theme.css
+navbar:
+  right:
+    - text: "Dashboard"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "NZAGE"
+      href: https://nzage.co.nz/
+    - text: "Talent Solutions"
+      href: https://talentsolutions.co.nz/
+    - icon: fa fa-paper-plane
+      href: mailto:seren@talentsolutions.co.nz
+output: distill::distill_article

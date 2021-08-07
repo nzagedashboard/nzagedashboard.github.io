@@ -1,0 +1,247 @@
+---
+title: "Dashboard 2021"
+description: |
+  Status of responses for the NZAGE graduate and employer surveys. Updated daily.
+site: distill::distill_website
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+---
+
+```{r, eval = FALSE, echo=FALSE}
+# Packages needed. Should only have to run once
+list_of_packages <- c("tidyverse", "lubridate", "fuzzyjoin", "plotly",
+                      "DT", "knitr", "widgetframe")
+to_install <- list_of_packages[!(list_of_packages %in% installed.packages()[,"Package"])]
+if(length(to_install)) install.packages(to_install)
+```
+```{r libraries, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(fuzzyjoin)
+library(DT)
+library(widgetframe)
+library(knitr)
+library(plotly)
+
+
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE, error=FALSE)
+mycol = c('#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f')
+```
+```{r}
+# Concordance
+# Tip: I was getting some weird space characters from the CSV 
+# that showed up as question marks in diamonds in Viewer. 
+# Did a replace all spaces with spaces in the .csv. Worked.
+
+ref = read_csv("Data/org-ref.csv") %>% 
+  rename(org_messy = Organisation) %>% 
+  rename(Employer = `Correct Title`) %>% 
+  select(1:3) %>% 
+  filter(!is.na(Employer)) %>% 
+  distinct()
+
+employers <- ref %>% 
+  select(Employer, Industry) %>% 
+  distinct()
+
+```
+```{r, eval = FALSE}
+## To do
+
+- Get the historical data
+- Set up API to connect with Survey Monkey
+- Set up CRON job to do updates
+  - GitHub connection
+- Check n for bespokes
+- Fix email (optional)
+- Add a URL if Seren wants (optional)
+
+
+To ask for
+- Historical bespokes counts?
+- Threshold for bespokes still the same (10)?
+```
+```{r}
+# Read in the most recent saved files
+files <- file.info(list.files("Data/fromAPI", full.names = T)) %>% 
+  rownames_to_column("file_name") %>% 
+  separate(file_name, sep = "_", into = c("date", "group"), remove = FALSE) %>% 
+  # trim off the .csv
+  mutate(group = str_remove(group, ".csv")) %>% 
+  group_by(group) %>% 
+  arrange(desc(mtime)) %>% 
+  slice(1)
+```
+```{r}
+# This currently implements two joins, one of known ways that people enter their company name and an additional fuzzy match
+# This won't be perfect! List should be verified by a human somewhat regularly. 
+
+grads_min <- read_csv(as.character(files[which(files$group == "grads"),1]))
+
+grads_clean <- grads_min %>% 
+  rowid_to_column() %>% 
+  left_join(ref, by = c("Employer" = "org_messy"), suffix = c("", "_conc")) %>% 
+  fuzzyjoin::stringdist_left_join(employers, max_dist = 5, 
+                                  by = c("Employer" = "Employer"), 
+                                  ignore_case = TRUE, distance_col = "diff") %>% 
+  group_by(rowid) %>% 
+  arrange(diff) %>% 
+  slice(1) %>% 
+  mutate(Employer = case_when(!is.na(Employer_conc) ~ Employer_conc, 
+                              !is.na(Employer.y) ~ Employer.y,
+                              TRUE ~ "Unknown")) %>% 
+  filter(Employer != "Unknown")
+```
+```{r eval=FALSE}
+# make a file to check
+write_csv(filter(grads_clean, is.na(Employer_conc)), "Data/grad_issues.csv")
+````
+```{r}
+# This currently implements two joins, one of known ways that people enter their company name and an additional fuzzy match
+# This won't be perfect! List should be verified by a human somewhat regularly. 
+
+interns_min <- read_csv(as.character(files[which(files$group == "interns"),1]))
+
+interns_clean <- interns_min %>% 
+  rowid_to_column() %>% 
+  left_join(ref, by = c("Employer" = "org_messy"), suffix = c("", "_conc")) %>% 
+  fuzzyjoin::stringdist_left_join(employers, max_dist = 5, 
+                                  by = c("Employer" = "Employer"), 
+                                  ignore_case = TRUE, distance_col = "diff") %>% 
+  group_by(rowid) %>% 
+  arrange(diff) %>% 
+  slice(1) %>% 
+  mutate(Employer = case_when(!is.na(Employer_conc) ~ Employer_conc, 
+                              !is.na(Employer.y) ~ Employer.y,
+                              TRUE ~ "Unknown")) %>% 
+  filter(Employer != "Unknown")
+```
+```{r eval=FALSE}
+# make a file to check
+write_csv(filter(interns_clean, is.na(Employer_conc)), "Data/interns_issues.csv")
+````
+```{r}
+employers_clean <- read_csv(as.character(files[which(files$group == "employers"),1])) %>% 
+  rowid_to_column() %>% 
+  left_join(ref, by = c("Employer" = "org_messy"), suffix = c("", "_conc")) %>% 
+  fuzzyjoin::stringdist_left_join(employers, max_dist = 5, 
+                                  by = c("Employer" = "Employer"), 
+                                  ignore_case = TRUE, distance_col = "diff") %>% 
+  group_by(rowid) %>% 
+  arrange(diff) %>% 
+  slice(1) %>% 
+  mutate(Employer = case_when(!is.na(Employer_conc) ~ Employer_conc, 
+                              !is.na(Employer.y) ~ Employer.y,
+                              TRUE ~ "Unknown")) %>% 
+  filter(Employer != "Unknown")
+```
+```{r}
+### Set update time
+update_time <- lubridate::with_tz(Sys.time(), tzone = "Pacific/Auckland")
+update_time = format(update_time,format='%Y-%m-%d %H:%M')
+
+```
+___Update as of `r update_time`.___
+
+## Progress so far
+
+The below charts show how we're tracking for **complete** graduate, intern and employer surveys, as well as how many bespoke reports have been earned. 
+
+#### Note on bespoke reports
+An organisation earns a bespoke report when 10 or more of their graduates complete the graduate survey. They must also be a member of the NZAGE—this update data only reflects whether they have 10 or more complete graduate response. Double check NZAGE status before confirming with an organisation.
+
+
+```{r}
+# Historical data
+historical_data <- tibble::tribble(
+  ~Year,           ~Employers, ~Grads, ~Interns, ~Bespokes,
+  "2018",             38L,            591L,           NA, 27,
+  "2019",             43L,            665L,         223, 27,
+  "2020",             48L,            863L,         320, 25,
+  ) %>% 
+  pivot_longer(-Year, names_to = "type", values_to = "n" )
+
+
+# Count bespokes
+bespokes <- grads_clean %>% 
+  filter(complete) %>% 
+  group_by(Employer) %>% 
+  count() %>% 
+  filter(n >= 10)
+  
+# Stack all the data
+full <- bind_rows(list(Employers = employers_clean, Grads = grads_clean, Interns = interns_clean), .id = "type") %>% 
+  select(type, Employer, date_modified, complete) %>% 
+  filter(complete)
+
+summary <- full %>% 
+  group_by(type) %>% 
+  count() %>% 
+  bind_rows(tibble(type = "Bespokes", n = nrow(bespokes))) %>% 
+  mutate(Year = "YTD") %>% 
+  bind_rows(historical_data) %>% 
+  rename(Count = n) %>% 
+  mutate(type = factor(type, levels = c("Grads", "Interns", "Employers", "Bespokes")))
+
+summary %>% 
+  ggplot(aes(x = Year, y = Count, fill = as.factor(Year))) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~type, scales = "free_y") +
+  theme_minimal() +
+  geom_text(aes(label = Count), vjust = -0.3) +
+  theme(panel.grid=element_blank()) +
+  geom_blank(aes(y=Count*1.2)) +
+  theme(strip.text.x = element_text(size = 12)) +
+  guides(fill=FALSE) +
+  scale_fill_manual(values=mycol[c(1,2,3,5)]) +
+  ggtitle("Complete responses to date compared with historical counts") +
+  labs(caption = "Prepared by Talent Solutions for the NZAGE, 2021")
+
+```
+
+
+### Responses over time
+
+```{r}
+full %>% 
+  mutate(Date = lubridate::ymd(as.Date(date_modified))) %>% 
+  group_by(type, Date) %>% 
+  count() %>% 
+  group_by(type) %>% 
+  mutate(`Cumulative count` = cumsum(n)) %>% 
+  ggplot(aes(x = Date, y = `Cumulative count`, group = type, colour = type)) +
+  geom_line() +
+  geom_line(size=1.5) +
+  theme_minimal() +
+  theme(panel.grid.minor=element_blank()) +
+  ggtitle("Cumulative complete responses over time") +
+  #facet_wrap(~type, ncol = 1, scales = "free") +
+  theme(legend.position="bottom") +
+  labs(colour = "") +
+  scale_color_manual(values=mycol[c(2,3,5)]) +
+  labs(caption = "Prepared by Talent Solutions for the NZAGE, 2021")
+
+```
+
+## Summary by organisation
+
+```{r}
+
+org_summary <- full %>% 
+  group_by(Employer, type) %>% 
+  count() %>% 
+  ungroup() %>% 
+  complete(Employer, type, fill = list(n = 0)) %>% 
+  pivot_wider(id_cols = Employer, names_from = type, values_from = n) %>% 
+  rename(`Complete Employer Survey?` = Employers) %>% 
+  mutate(`Complete Employer Survey?` = if_else(`Complete Employer Survey?` > 0, "Yes", "No")) %>% 
+  mutate(`Bespoke report?` = if_else(Grads >= 10, "Yes", "No"))
+
+```
+
+This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[While we have done our best to automate matching interns and graduates to their correct employers based on their free text answers, the numbers may change somewhat with final data cleaning as unidentified or misidentified employers are corrected.] are included.
+
+`r DT::datatable(org_summary)`
+
