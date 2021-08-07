@@ -15,6 +15,17 @@ Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS  10.16
 ```
 Note: I did this on a Mac
-##nSkills
+##Skills
 
-- 
+- Connecting to SurveyMonkey from API (surveymonkey package, creating an authentication token)
+- File management (list.files(), file.info())
+- Wrangling data
+- Visualizing data
+- Create HTML files in R (can be a simple single page or )
+- Git and GitHub 
+
+
+### Automation
+
+Need to allow the bash script to be executed
+`chmod +x ~/Documents/GitHub/nzagedashboard.github.io/nzagedashboard_driver.sh`
