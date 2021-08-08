@@ -249,7 +249,7 @@ org_summary <- full %>%
 
 ```
 
-This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[We have used a two-stage automated checking approach based on historical response patterns and 'fuzzy' matching to maximise correct coding of the free text responses that grads/interns provide to identify their employer. This coding will be human-verified with final data cleaning and so these counts are subject to change as unidentified or misidentified employers are corrected.] are included.
+This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[We have used a two-stage automated checking approach based on historical response patterns and 'fuzzy' matching to maximise correct coding of the free text responses that grads/interns provide to identify their employer. This coding will be human verified with final data cleaning and so these counts are subject to change as unidentified or misidentified employers are corrected.] are included.
 
 `r DT::datatable(org_summary)`
 
