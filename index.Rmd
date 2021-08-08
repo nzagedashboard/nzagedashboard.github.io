@@ -143,11 +143,11 @@ update_time <- lubridate::with_tz(Sys.time(), tzone = "Pacific/Auckland")
 update_time = format(update_time,format='%Y-%m-%d %H:%M')
 
 ```
-_Update as of `r update_time`._
+_Last updated `r update_time`._
 
 ## Progress to date
 
-The below charts show how we're tracking for **complete** graduate, intern and employer surveys, as well as how many bespoke reports have been earned. 
+The below charts track **complete** graduate, intern and employer surveys, as well as how many bespoke reports have been earned. 
 
 #### Note on bespoke reports
 An organisation earns a bespoke report when 10 or more of their graduates complete the graduate survey. They must also be a member of the NZAGE—this update data only reflects whether they have 10 or more complete graduate response. Double check NZAGE status before confirming with an organisation.

@@ -4,11 +4,12 @@ description: |
   NZAGE Dashboard
 output_dir: "docs"
 theme: theme.css
+favicon: images/favicon.ico
 navbar:
   right:
     - text: "Dashboard"
       href: index.html
-    - text: "About"
+    - text: "FAQ"
       href: about.html
     - text: "NZAGE"
       href: https://nzage.co.nz/

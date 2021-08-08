@@ -13,7 +13,7 @@ If there are any issues with the dashboard, please email survey@talentsolutions.
 
 ### Who created this?
 
-This dashboard has been created by [Talent Solutions](https://talentsolutions.co.nz/) for the New Zealand Association of Graduate Employers..
+This dashboard has been created by [Talent Solutions](https://talentsolutions.co.nz/) for the New Zealand Association of Graduate Employers.
 
 Talent Solutions are early talent consulting and research specialists.
 Talent Solutions is dedicated to supporting your organisation to engage outstanding talent.  Our core focus is early talent programmes – degree qualified graduates, interns, school-leavers and cadets.
