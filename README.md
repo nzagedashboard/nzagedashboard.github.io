@@ -6,9 +6,11 @@ This repo creates a dashboard summarising responses to the NZAGE Graduate, Inter
 
 -   Connect to SurveyMonkey from API (`surveymonkey` package, creating an authentication token)
 
+-   Using an R project (recommended, but possible to go without if not doing Distill site)
+
 -   File management `(list.files()`, `file.info()`)
 
--   Wrangling data (`dplyr`)
+-   Wrangling data (`dplyr`), including joins and fuzzy matching (fuzzyjoin).
 
 -   Visualizing data (`ggplot2`)
 
@@ -17,6 +19,8 @@ This repo creates a dashboard summarising responses to the NZAGE Graduate, Inter
 -   Git and GitHub
 
 -   `crontab` on Linux/Mac terminals (I think there are reasonably equivalent things on Windows, but don't know them)
+
+![Image summarising the instructions below](images/workflow_map.png)
 
 ## Technical set up
 
@@ -31,15 +35,15 @@ Note: I did this on a Mac. That set up will be different for a Windows machine.
 
 ## Automation is the hardest part (for me at least)
 
-Pretty reliably you should be able to get this down to just needing to run one line to have everything else happen, it is setting up the `crontab` that I had the most trouble with, though it is super reqarding when it does work.
+Pretty reliably you should be able to get this down to just needing to run one line to have everything else happen, it is setting up the `crontab` to run that I had the most trouble with, though it is super rewarding when it does work. This was less due to the crontab syntax and more the just getting all the permissions (GitHub, files executable, Full Disk writable) and paths sorted out. 
 
-Some of these instructions are probably just superstition...
+Here is what I landed on, but some of these instructions are probably just superstition...Google is your friend when it comes to tackling this on your own machine. 
 
-Need to allow the bash script to be executed before putting it in a crontab job `chmod +x ~/Documents/GitHub/nzagedashboard.github.io/nzagedashboard_driver.sh`.
+Firstly, you need to allow the bash script to be executed before putting it in a crontab job. You can do this with: `chmod +x ~/Documents/GitHub/nzagedashboard.github.io/nzagedashboard_driver.sh`.
 
 Make sure your GitHub credentials are set up, you want the SSH version. Just google whatever GitHub's latest advice is.
 
-I had issues getting the correct version of pandoc to be applied, so have to put it explicitly in the R code that is run.
+I had issues getting the correct version of __pandoc__ to be applied, so you have to put it explicitly in the R code that is run.
 
 This is my `nzagedashboard.sh` file:
 
@@ -60,13 +64,15 @@ This code sets the working directory to my folder for this project, then (line 2
 
 1.  Open Terminal
 2.  Type `crontab -e` and Enter/Return
-3.  Press `i` to enter 'Insert mode' and add a line like this: `0 */3 * * * ~/Documents/GitHub/nzagedashboard.github.io/nzagedashboard_driver.sh`. This says "run this script every three hours". This site is really helpful for interpretting the cron syntax <https://crontab.guru/#0_*/3_*_*_>\*
+3.  Press `i` to enter 'Insert mode' and add a line like this: `0 */3 * * * ~/Documents/GitHub/nzagedashboard.github.io/nzagedashboard_driver.sh`. This says "run this script every three hours". This site is really helpful for interpreting the cron syntax <https://crontab.guru/#0_*/3_*_*_>\*
+4. When finished editing, pres Escape then type :wq to save and exit.
+5. You can list your jobs with `crontab -l`.
 
 ## Connecting to the Survey Monkey API
 
 This is the 'instructions' version of the code. The file that is actually run is `connect_API.R`.
 
-## 1. Install the required packages
+### 1. Install the required packages
 
 The `surveymonkey` package makes it easier to access the Survey Monkey API in R. It is developed and maintained by TNTP, a nonprofit company working to end the injustice of educational inequality.
 
@@ -95,11 +101,11 @@ devtools::install_github("tntp/surveymonkey")
     library("surveymonkey")
     library("tidyverse")
 
-## 2. Set up an API key in Survey Monkey
+### 2. Set up an API key in Survey Monkey
 
 At time of writing, you create your access token by making a new private app here: <https://developer.surveymonkey.com/apps/>.
 
-Then follow these intructions from the surveymonkey package documentation (or more updated authentication information):
+Then follow these instructions from the surveymonkey package documentation (or more updated authentication information):
 
 Add the SurveyMonkey account's OAuth token to your .Rprofile file. To open and edit that file, run `usethis::edit_r_profile()`, then add a line like this: `options(sm_oauth_token = "kmda332fkdlakfld8am7ml3dafka-dafknalkfmalkfad-THIS IS NOT THE REAL KEY THOUGH").`
 
@@ -112,9 +118,9 @@ WARNING 3: Only 100 responses can be fetched per API call, a survey with X respo
     # Get the latest 10 (or n) surveys so you can find the IDs for the surveys you want
     surveys <- browse_surveys(10)
 
-## 3. Get the data
+### 3. Get the data
 
-Here I'm saving the data as .csv that can be used as back up and more easily integrated into the site.
+Here I'm saving the data in .csv files that can be used as back up and more easily integrated into the site. It also means having this file be separate helps when testing other parts of the workflow.
 
     # This took 6 requests when last run
     grads_raw <- 302886746 %>% 
