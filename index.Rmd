@@ -28,6 +28,7 @@ library(plotly)
 
 knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE, error=FALSE)
 mycol = c('#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f')
+mycol2 <- c("#550D80", "#EDA82F", "#299E73")
 ```
 ```{r}
 # Concordance
@@ -152,6 +153,7 @@ The below charts track **complete** graduate, intern and employer surveys, as we
 #### Note on bespoke reports
 An organisation earns a bespoke report when 10 or more of their graduates complete the graduate survey. They must also be a member of the NZAGE—this update data only reflects whether they have 10 or more complete graduate response. Double check NZAGE status before confirming with an organisation.
 
+### Complete responses to date compared with historical counts
 
 ```{r}
 # Historical data
@@ -196,11 +198,12 @@ summary %>%
   theme(strip.text.x = element_text(size = 12)) +
   guides(fill=FALSE) +
   scale_fill_manual(values=mycol[c(1,2,3,5)]) +
-  ggtitle("Complete responses to date compared with historical counts") +
+  #ggtitle("Complete responses to date compared with historical counts") +
   labs(caption = "Prepared by Talent Solutions for the NZAGE, 2021")
 
 ```
 
+### Cumulative complete responses over time for 2021 surveys
 
 ```{r}
 linegraph <- full %>% 
@@ -214,11 +217,11 @@ linegraph <- full %>%
   geom_line(size=1.5) +
   theme_minimal() +
   theme(panel.grid.minor=element_blank()) +
-  ggtitle("Cumulative complete responses over time for 2021 surveys") +
+  #ggtitle("Cumulative complete responses over time for 2021 surveys") +
   #facet_wrap(~type, ncol = 1, scales = "free") +
   theme(legend.position="bottom") +
   labs(colour = "") +
-  scale_color_manual(values=mycol[c(2,3,5)]) +
+  scale_color_manual(values=mycol2) +
   labs(caption = "Prepared by Talent Solutions for the NZAGE, 2021") 
 
 plotly::ggplotly(linegraph, tooltip = c("Date", "Cumulative count")) %>% 
@@ -246,7 +249,7 @@ org_summary <- full %>%
 
 ```
 
-This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[While we have used a two-stage automated checking approach to maximise correct coding of free text responses identifying the employer of each graduate and intern, these numbers may change somewhat with final data cleaning as unidentified or misidentified employers are corrected.] are included.
+This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[We have used a two-stage automated checking approach based on historical response patterns and 'fuzzy' matching to maximise correct coding of the free text responses that grads/interns provide to identify their employer. This coding will be human-verified with final data cleaning and so these counts are subject to change as unidentified or misidentified employers are corrected.] are included.
 
 `r DT::datatable(org_summary)`
 
