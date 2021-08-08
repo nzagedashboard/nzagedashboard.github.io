@@ -145,7 +145,7 @@ update_time = format(update_time,format='%Y-%m-%d %H:%M')
 ```
 _Update as of `r update_time`._
 
-## Progress so far
+## Progress to date
 
 The below charts show how we're tracking for **complete** graduate, intern and employer surveys, as well as how many bespoke reports have been earned. 
 
@@ -237,11 +237,12 @@ org_summary <- full %>%
   pivot_wider(id_cols = Employer, names_from = type, values_from = n) %>% 
   rename(`Complete Employer Survey?` = Employers) %>% 
   mutate(`Complete Employer Survey?` = if_else(`Complete Employer Survey?` > 0, "Yes", "No")) %>% 
-  mutate(`Bespoke report?` = if_else(Grads >= 10, "Yes", "No"))
+  mutate(`Bespoke report?` = if_else(Grads >= 10, "Yes", "No")) %>% 
+  select(everything(), Grads, `Bespoke report?`)
 
 ```
 
-This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[While we have used a two-stage automated checking approach to maximise correct coding of free text responses identifying the employer of eahc graduate and intern, these numbers may change somewhat with final data cleaning as unidentified or misidentified employers are corrected.] are included.
+This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[While we have used a two-stage automated checking approach to maximise correct coding of free text responses identifying the employer of each graduate and intern, these numbers may change somewhat with final data cleaning as unidentified or misidentified employers are corrected.] are included.
 
 `r DT::datatable(org_summary)`
 
