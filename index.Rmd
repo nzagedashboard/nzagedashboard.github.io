@@ -202,10 +202,8 @@ summary %>%
 ```
 
 
-### Responses over time
-
 ```{r}
-full %>% 
+linegraph <- full %>% 
   mutate(Date = lubridate::ymd(as.Date(date_modified))) %>% 
   group_by(type, Date) %>% 
   count() %>% 
@@ -216,12 +214,18 @@ full %>%
   geom_line(size=1.5) +
   theme_minimal() +
   theme(panel.grid.minor=element_blank()) +
-  ggtitle("Cumulative complete responses over time") +
+  ggtitle("Cumulative complete responses over time for 2021 surveys") +
   #facet_wrap(~type, ncol = 1, scales = "free") +
   theme(legend.position="bottom") +
   labs(colour = "") +
   scale_color_manual(values=mycol[c(2,3,5)]) +
-  labs(caption = "Prepared by Talent Solutions for the NZAGE, 2021")
+  labs(caption = "Prepared by Talent Solutions for the NZAGE, 2021") 
+
+plotly::ggplotly(linegraph, tooltip = c("Date", "Cumulative count")) %>% 
+    layout(legend = list(
+      orientation = "h"
+    )
+  )
 
 ```
 
