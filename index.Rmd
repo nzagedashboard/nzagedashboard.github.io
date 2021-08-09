@@ -148,7 +148,7 @@ _Last updated `r update_time`._
 
 ## Progress to date
 
-The below charts track **complete** graduate, intern and employer surveys, as well as how many bespoke reports have been earned. The survey closes on September 10. 
+The below charts track **complete** graduate, intern and employer surveys, as well as how many bespoke reports have been earned. The surveys close on September 10. 
 
 #### Note on bespoke reports
 An organisation earns a graduate or intern bespoke report when 10 or more of their graduates or interns, respecitvely, complete the survey. They must also be a member of the NZAGE—this update data only reflects whether they have 10 or more complete responses for the survey. Double check NZAGE status before confirming with an organisation.
