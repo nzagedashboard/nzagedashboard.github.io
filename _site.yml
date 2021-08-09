@@ -16,5 +16,5 @@ navbar:
     - text: "Talent Solutions"
       href: https://talentsolutions.co.nz/
     - icon: fa fa-paper-plane
-      href: mailto:seren@talentsolutions.co.nz
+      href: mailto:support@talentsolutions.co.nz
 output: distill::distill_article

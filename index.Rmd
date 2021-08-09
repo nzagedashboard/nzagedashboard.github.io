@@ -148,17 +148,17 @@ _Last updated `r update_time`._
 
 ## Progress to date
 
-The below charts track **complete** graduate, intern and employer surveys, as well as how many bespoke reports have been earned. 
+The below charts track **complete** graduate, intern and employer surveys, as well as how many bespoke reports have been earned. The survey closes on September 10. 
 
 #### Note on bespoke reports
-An organisation earns a bespoke report when 10 or more of their graduates complete the graduate survey. They must also be a member of the NZAGE—this update data only reflects whether they have 10 or more complete graduate response. Double check NZAGE status before confirming with an organisation.
+An organisation earns a graduate or intern bespoke report when 10 or more of their graduates or interns, respecitvely, complete the survey. They must also be a member of the NZAGE—this update data only reflects whether they have 10 or more complete responses for the survey. Double check NZAGE status before confirming with an organisation.
 
 ### Complete responses to date compared with historical counts
 
-```{r}
+```{r, fig.height=7}
 # Historical data
 historical_data <- tibble::tribble(
-  ~Year,           ~Employers, ~Grads, ~Interns, ~Bespokes,
+  ~Year,           ~Employers, ~Grads, ~Interns, ~`Grad bespoke reports`,
   "2018",             38L,            591L,           NA, 27,
   "2019",             43L,            665L,         223, 27,
   "2020",             48L,            863L,         320, 25,
@@ -172,6 +172,12 @@ bespokes <- grads_clean %>%
   group_by(Employer) %>% 
   count() %>% 
   filter(n >= 10)
+
+intern_bespokes <- interns_clean %>% 
+  filter(complete) %>% 
+  group_by(Employer) %>% 
+  count() %>% 
+  filter(n >= 10)
   
 # Stack all the data
 full <- bind_rows(list(Employers = employers_clean, Grads = grads_clean, Interns = interns_clean), .id = "type") %>% 
@@ -181,16 +187,17 @@ full <- bind_rows(list(Employers = employers_clean, Grads = grads_clean, Interns
 summary <- full %>% 
   group_by(type) %>% 
   count() %>% 
-  bind_rows(tibble(type = "Bespokes", n = nrow(bespokes))) %>% 
+  bind_rows(tibble(type = "Grad bespoke reports", n = nrow(bespokes))) %>% 
+  bind_rows(tibble(type = "Intern bespoke reports", n = nrow(intern_bespokes))) %>% 
   mutate(Year = "YTD") %>% 
   bind_rows(historical_data) %>% 
   rename(Count = n) %>% 
-  mutate(type = factor(type, levels = c("Grads", "Interns", "Employers", "Bespokes")))
+  mutate(type = factor(type, levels = c("Grads", "Grad bespoke reports", "Interns", "Intern bespoke reports", "Employers")))
 
 summary %>% 
   ggplot(aes(x = Year, y = Count, fill = as.factor(Year))) +
   geom_bar(stat = "identity") +
-  facet_wrap(~type, scales = "free_y") +
+  facet_wrap(~type, scales = "free_y", nrow = 3) +
   theme_minimal() +
   geom_text(aes(label = Count), vjust = -0.3) +
   theme(panel.grid=element_blank()) +
@@ -205,16 +212,37 @@ summary %>%
 
 ### Cumulative complete responses over time for 2021 surveys
 
-```{r}
-linegraph <- full %>% 
+The solid lines below represent the current cumulative responses to all three surveys. The dotted lines and final diamond points indicate the path to equalling last year's final numbers by the set survey closing date.
+
+```{r, fig.height=5}
+survey_close = lubridate::ymd("2021-09-10")
+alt_hist = filter(historical_data, Year == "2020") %>% 
+  filter(type != "Grad bespoke reports") %>% 
+  rename(alt_n = "n") %>% 
+  mutate(myx = survey_close)
+
+
+linegraph_data <- full %>% 
   mutate(Date = lubridate::ymd(as.Date(date_modified))) %>% 
   group_by(type, Date) %>% 
   count() %>% 
   group_by(type) %>% 
-  mutate(`Cumulative count` = cumsum(n)) %>% 
+  mutate(`Cumulative count` = cumsum(n))
+
+coords <- linegraph_data %>% 
+  filter(Date == max(Date)) %>% 
+  left_join(alt_hist, by = "type") %>% 
+  mutate(diff_date = parse_number(as.character(difftime(myx, Date)))) %>% 
+  mutate(slope = (alt_n-n)/diff_date)
+  
+
+linegraph <- linegraph_data %>% 
   ggplot(aes(x = Date, y = `Cumulative count`, group = type, colour = type)) +
   geom_line() +
   geom_line(size=1.5) +
+  geom_vline(aes(xintercept = survey_close), lty = 2) +
+  geom_point(data = alt_hist, aes(x = myx, y = alt_n), pch = 18) +
+  geom_segment(data = coords, aes(x = Date, y = `Cumulative count`, xend = myx, yend = alt_n), lty = 3) +
   theme_minimal() +
   theme(panel.grid.minor=element_blank()) +
   #ggtitle("Cumulative complete responses over time for 2021 surveys") +
@@ -244,12 +272,13 @@ org_summary <- full %>%
   pivot_wider(id_cols = Employer, names_from = type, values_from = n) %>% 
   rename(`Complete Employer Survey?` = Employers) %>% 
   mutate(`Complete Employer Survey?` = if_else(`Complete Employer Survey?` > 0, "Yes", "No")) %>% 
-  mutate(`Bespoke report?` = if_else(Grads >= 10, "Yes", "No")) %>% 
-  select(everything(), Grads, `Bespoke report?`)
+  mutate(`Grad bespoke report?` = if_else(Grads >= 10, "Yes", "No")) %>% 
+  mutate(`Intern bespoke report?` = if_else(Interns >= 10, "Yes", "No")) %>% 
+  select(Employer, `Complete Employer Survey?`, Grads, `Grad bespoke report?`, Interns, `Intern bespoke report?`)
 
 ```
 
 This sortable and searchable table shows all organisations that have had graduate, intern and/or employer responses in 2021. Only complete counts^[We have used a two-stage automated checking approach based on historical response patterns and 'fuzzy' matching to maximise correct coding of the free text responses that grads/interns provide to identify their employer. This coding will be human verified with final data cleaning and so these counts are subject to change as unidentified or misidentified employers are corrected.] are included.
 
-`r DT::datatable(org_summary)`
+`r DT::datatable(org_summary, rownames=FALSE)`
 
