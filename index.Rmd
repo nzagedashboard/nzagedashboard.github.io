@@ -158,10 +158,10 @@ An organisation earns a graduate or intern bespoke report when 10 or more of the
 ```{r, fig.height=7}
 # Historical data
 historical_data <- tibble::tribble(
-  ~Year,           ~Employers, ~Grads, ~Interns, ~`Grad bespoke reports`,
-  "2018",             38L,            591L,           NA, 27,
-  "2019",             43L,            665L,         223, 27,
-  "2020",             48L,            863L,         320, 25,
+  ~Year,           ~Employers, ~Grads, ~Interns, ~`Grad bespoke reports`, ~`Intern bespoke reports`,
+  "2018",             38L,            591L,           NA, 27, 0,
+  "2019",             43L,            665L,         223, 27, 0, 
+  "2020",             48L,            863L,         320, 44, 37, 
   ) %>% 
   pivot_longer(-Year, names_to = "type", values_to = "n" )
 
@@ -218,16 +218,23 @@ The solid lines below represent the current cumulative responses to all three su
 survey_close = lubridate::ymd("2021-09-10")
 alt_hist = filter(historical_data, Year == "2020") %>% 
   filter(type != "Grad bespoke reports") %>% 
+  filter(type != "Intern bespoke reports") %>% 
   rename(alt_n = "n") %>% 
   mutate(myx = survey_close)
 
+end_point_assistant <- tibble(type = c("Employers", "Interns", "Grads"),
+                              Date = max(lubridate::ymd(as.Date(full$date_modified))))
 
 linegraph_data <- full %>% 
   mutate(Date = lubridate::ymd(as.Date(date_modified))) %>% 
   group_by(type, Date) %>% 
   count() %>% 
   group_by(type) %>% 
-  mutate(`Cumulative count` = cumsum(n))
+  mutate(`Cumulative count` = cumsum(n)) %>% 
+  group_by(type) %>% 
+  bind_rows(end_point_assistant) %>% 
+  arrange(type, Date) %>% 
+  fill(`Cumulative count`)
 
 coords <- linegraph_data %>% 
   filter(Date == max(Date)) %>% 
