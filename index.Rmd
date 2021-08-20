@@ -48,22 +48,6 @@ employers <- ref %>%
   distinct()
 
 ```
-```{r, eval = FALSE}
-## To do
-
-- Get the historical data
-- Set up API to connect with Survey Monkey
-- Set up CRON job to do updates
-  - GitHub connection
-- Check n for bespokes
-- Fix email (optional)
-- Add a URL if Seren wants (optional)
-
-
-To ask for
-- Historical bespokes counts?
-- Threshold for bespokes still the same (10)?
-```
 ```{r}
 # Read in the most recent saved files
 files <- file.info(list.files("Data/fromAPI", full.names = T)) %>% 
@@ -98,7 +82,7 @@ grads_clean <- grads_min %>%
 ```{r eval=FALSE}
 # make a file to check
 write_csv(filter(grads_clean, is.na(Employer_conc)), "Data/grad_issues.csv")
-````
+```
 ```{r}
 # This currently implements two joins, one of known ways that people enter their company name and an additional fuzzy match
 # This won't be perfect! List should be verified by a human somewhat regularly. 
